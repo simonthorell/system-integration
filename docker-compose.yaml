@@ -1,7 +1,6 @@
-version: "3.8"
-
 services:
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -12,6 +11,7 @@ services:
       - "8080:8080"
 
   backend:
+    container_name: backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -26,6 +26,7 @@ services:
     command: mvn spring-boot:run
 
   mysql:
+    container_name: db-mysql
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
@@ -36,4 +37,3 @@ services:
 
 volumes:
   mysql-data:
-  # node_modules_volume:
