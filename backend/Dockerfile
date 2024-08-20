@@ -12,12 +12,6 @@ WORKDIR /app
 # Copy the project files into the container
 COPY . .
 
-# Download and set up Maven Wrapper (if it's not already present)
-RUN if [ ! -f mvnw ]; then \
-      mvn -N io.takari:maven:wrapper && \
-      chmod +x mvnw; \
-    fi
-
 # Run Maven to clean and package the application
 RUN ./mvnw clean package
 
@@ -25,4 +19,4 @@ RUN ./mvnw clean package
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "target/your-backend-app.jar"]
+CMD ["java", "-jar", "target/system-integration.jar"]
