@@ -1,26 +1,26 @@
-# Use the official Node.js image as the base
-FROM node:18-alpine
+# Use an official Node runtime as a parent image
+FROM node:latest
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
+# Install Quasar CLI globally
+RUN npm install -g @quasar/cli@latest
+
+# Copy package.json and install dependencies
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application files
+# # Add the rest of the code
 COPY . .
 
-# Build the application for production
-RUN npm run build
+# Build Quasar app
+# RUN quasar build
 
-# Install a lightweight HTTP server for serving static files
-RUN npm install -g http-server
-
-# Expose the port the application will run on
+# Make port 8080 available
 EXPOSE 8080
 
-# Command to run the application
-CMD ["http-server", "dist"]
+# Serve the app
+CMD ["quasar", "dev"]
