@@ -1,5 +1,5 @@
 # Use a Debian-based OpenJDK image as the base
-FROM openjdk:18-jdk-slim
+FROM openjdk:24-jdk-slim
 
 # Install Maven
 RUN apt-get update && \
