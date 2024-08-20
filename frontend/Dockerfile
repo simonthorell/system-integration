@@ -16,9 +16,6 @@ RUN npm install
 # # Add the rest of the code
 COPY . .
 
-# Build Quasar app
-# RUN quasar build
-
 # Make port 8080 available
 EXPOSE 8080
 
