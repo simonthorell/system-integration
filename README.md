@@ -18,6 +18,11 @@ This project utlize TypeScript/Vue/Quasar for the frontend, Java Spring Boot wit
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-web</artifactId>
 </dependency>
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <scope>runtime</scope>
+</dependency>
 ```
 
 3. Rename the respective folders from the default names to frontend/backend
@@ -28,6 +33,17 @@ This project utlize TypeScript/Vue/Quasar for the frontend, Java Spring Boot wit
 2. Run: `brew services start mysql`
 3. Secure/Set password: `mysql_secure_installation`
 4. Verify: `mysql --version`
+
+### Grant Access to User
+
+1. `docker exec -it db-mysql mysql -u root -p` and enter root pw.
+2. Create New User:
+
+- `CREATE USER 'myuser'@'%' IDENTIFIED BY 'mypassword';`
+- `GRANT ALL PRIVILEGES ON *.* TO 'myuser'@'%';`
+- `FLUSH PRIVILEGES;`
+- `SHOW GRANTS FOR 'myuser'@'%';`
+- Test User: `mysql -h 127.0.0.1 -P 3307 -u myuser -p`
 
 ## Setup & Run Kubernetes Cluster
 

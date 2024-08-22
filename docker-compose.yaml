@@ -32,13 +32,14 @@ services:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
+      # MYSQL_DATABASE: mydatabase
+      # MYSQL_USER: myuser
+      # MYSQL_PASSWORD: mypassword
     volumes:
       - mysql-data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      # - "3306:3306"
+      - "3307:3306" # Map local port 3307 to container port 3306
 
 volumes:
   mysql-data:
