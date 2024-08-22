@@ -24,12 +24,17 @@ services:
       - DB_HOST=mysql
       - DB_PASSWORD=my-secret-pw
     command: mvn spring-boot:run
+    depends_on:
+      - mysql
 
   mysql:
     container_name: db-mysql
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
     volumes:
       - mysql-data:/var/lib/mysql
     ports:

@@ -11,6 +11,14 @@ This project utlize TypeScript/Vue/Quasar for the frontend, Java Spring Boot wit
 
 - Frontend: Quasar CLI: `npm init quasar`
 - Backend: Create Spring Boot install file with Maven - https://start.spring.io/
+- Add the following in /backend/pom.xml:
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
 
 3. Rename the respective folders from the default names to frontend/backend
 
@@ -32,3 +40,8 @@ Below instructions only apply for macOS.
 5. Start Minicube: `minikube start`
 6. Run `apply-k8.sh` to add files to minicube.
 7. Open minikube dashboard: `minikube dashboard`
+
+### Minikube commands:
+
+- Delete all pods: `kubectl delete all --all`
+- Apply manifest: `kubectl apply -f k8s-manifest.yaml`
