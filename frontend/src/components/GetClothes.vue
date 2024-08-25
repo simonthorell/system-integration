@@ -1,10 +1,10 @@
 <template>
   <q-page class="q-pa-md">
     <q-form @submit="onSubmit">
-      <q-input v-model="productName" label="Product Name" outlined required />
-      <q-input v-model="color" label="Color" outlined required />
-      <q-input v-model="size" label="Size" outlined required />
-      <q-input v-model="brand" label="Brand" outlined required />
+      <q-input v-model="productName" label="Product Name" outlined />
+      <q-input v-model="color" label="Color" outlined />
+      <q-input v-model="size" label="Size" outlined />
+      <q-input v-model="brand" label="Brand" outlined />
       <q-btn
         type="submit"
         label="Find Customers"
@@ -73,3 +73,8 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="sass">
+.q-input
+  padding-top: 10px
+</style>

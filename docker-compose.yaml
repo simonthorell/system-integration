@@ -18,6 +18,10 @@ services:
     volumes:
       - ./backend:/app
       - /app/target
+      # Below is required for Hot Reload
+      - ~/.m2:/root/.m2 # Cache Maven dependencies
+      - ./backend/src:/app/src # Mount the source code
+      - ./backend/target:/app/target # Mount the target directory
     ports:
       - "5000:5000"
     environment:
