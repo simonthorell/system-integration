@@ -45,6 +45,13 @@ This project utlize TypeScript/Vue/Quasar for the frontend, Java Spring Boot wit
 - `SHOW GRANTS FOR 'myuser'@'%';`
 - Test User: `mysql -h 127.0.0.1 -P 3307 -u myuser -p`
 
+## Test Spring Boot REST API
+
+1. Start up all instances with `docker-compose up`
+2. In the `src/main/resources/application.properties` file in backend we exponse port 5000 to the docker network by adding `server.port=5000`.
+3. Open a docker interactive shell on frontend instance `docker exec -it frontend /bin/sh`
+4. Use curl to test the API: `curl "http://backend:5000/customers/who-bought?productName=Blue%20Jeans&color=Blue&size=L&brand=DenimCo"`
+
 ## Setup & Run Kubernetes Cluster
 
 Below instructions only apply for macOS.
