@@ -10,6 +10,7 @@ This project utlize TypeScript/Vue/Quasar for the frontend, Java Spring Boot wit
 2. Create frontend and backend projects:
 
 - Frontend: Quasar CLI: `npm init quasar`
+- `cd frontend` and `npm install` (for dev dependencies)
 - Backend: Create Spring Boot install file with Maven - https://start.spring.io/
 - Add the following in /backend/pom.xml:
 

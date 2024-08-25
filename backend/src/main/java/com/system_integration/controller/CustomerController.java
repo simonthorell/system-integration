@@ -2,6 +2,7 @@ package com.system_integration.controller;
 
 import com.system_integration.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,10 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    // Adding CrossOrigin to allow requests from the frontend
+    @CrossOrigin(origins = "http://localhost:8080")
+
+    // API endpoint to get customers who bought a specific product
     @GetMapping("/customers/who-bought")
     public List<String> getCustomersWhoBought(@RequestParam String productName,
                                               @RequestParam String color,
