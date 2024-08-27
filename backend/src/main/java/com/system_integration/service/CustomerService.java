@@ -6,7 +6,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Service
 public class CustomerService {
@@ -48,5 +50,27 @@ public class CustomerService {
         RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("name");
         
         return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
+    }
+    
+    public Map<String, Object> getBestSalesMonthThisYear() {
+        String sql = "SELECT DATE_FORMAT(o.order_date, '%M') as month, " +
+                 "SUM(oi.quantity * p.price) as total_sales_value " +
+                 "FROM `Order` o " +
+                 "JOIN OrderItem oi ON o.id = oi.order_id " +
+                 "JOIN Product p ON oi.product_id = p.id " +
+                 "WHERE YEAR(o.order_date) = YEAR(CURDATE()) " +
+                 "GROUP BY month " +
+                 "ORDER BY total_sales_value DESC " +
+                 "LIMIT 1";
+
+        // Log the query
+        System.out.println("SQL Query: " + sql);
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            Map<String, Object> result = new HashMap<>();
+            result.put("month", rs.getString("month"));
+            result.put("totalSales", rs.getInt("total_sales_value"));
+            return result;
+        });
     }
 }

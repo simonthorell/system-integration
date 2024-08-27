@@ -18,7 +18,7 @@ INSERT INTO ProductCategory (product_id, category_id) VALUES
 
 -- Create orders
 INSERT INTO `Order` (customer_id, order_date) VALUES
-(1, '2023-01-15'), (2, '2023-02-20'), (3, '2023-03-10');
+(1, '2024-01-15'), (2, '2024-02-20'), (3, '2024-03-10');
 
 -- Order items
 INSERT INTO OrderItem (order_id, product_id, quantity) VALUES 

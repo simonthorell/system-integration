@@ -1,25 +1,30 @@
 <template>
-  <q-card class="q-pa-md">
-    <div class="text-h6 text-left">Customer Purchase Totals</div>
-    <q-btn
-      @click="fetchCustomerTotals"
-      label="Get Customer Purchase Totals"
-      color="primary"
-      class="q-mt-md"
-    />
+  <q-card>
+    <q-card-section>
+      <div class="text-h6 text-left">Customer Purchase Totals</div>
+      <q-btn
+        @click="fetchCustomerTotals"
+        label="Get Customer Data"
+        color="primary"
+        class="q-mt-md"
+      />
+    </q-card-section>
 
-    <q-list v-if="customers.length" class="q-mt-md">
-      <q-item-label>Customer Purchase Totals</q-item-label>
-      <q-item v-for="customer in customers" :key="customer.name" clickable>
-        <q-item-section
-          >{{ customer.name }}: {{ customer.totalSpent }} kr</q-item-section
-        >
-      </q-item>
-    </q-list>
+    <q-card-section>
+      <q-table
+        :rows="customers"
+        :columns="columns"
+        row-key="name"
+        flat
+        bordered
+        style="min-height: 300px"
+      />
+    </q-card-section>
+
     <!-- Show a banner if no customers are found -->
-    <q-banner v-else-if="searchPerformed" class="q-mt-md">
+    <!-- <q-banner v-else-if="searchPerformed" class="q-mt-md">
       No customers found.
-    </q-banner>
+    </q-banner> -->
   </q-card>
 </template>
 
@@ -27,11 +32,22 @@
 import { ref } from 'vue';
 import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
+import { QTableProps } from 'quasar';
 
 export default defineComponent({
   setup() {
     const customers = ref<{ name: string; totalSpent: number }[]>([]);
     const searchPerformed = ref<boolean>(false);
+
+    const columns = ref<QTableProps['columns']>([
+      { name: 'name', label: 'Customer Name', field: 'name', align: 'left' },
+      {
+        name: 'totalSpent',
+        label: 'Total Spent (kr)',
+        field: 'totalSpent',
+        align: 'right',
+      },
+    ]);
 
     const fetchCustomerTotals = async () => {
       searchPerformed.value = false;
@@ -49,6 +65,7 @@ export default defineComponent({
 
     return {
       customers,
+      columns,
       searchPerformed,
       fetchCustomerTotals,
     };
