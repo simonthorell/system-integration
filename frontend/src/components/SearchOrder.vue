@@ -1,5 +1,6 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-card class="q-pa-md">
+    <div class="text-h6 text-left">Search Ordered Products</div>
     <q-form @submit="onSubmit">
       <q-input v-model="productName" label="Product Name" outlined />
       <q-input v-model="color" label="Color" outlined />
@@ -23,7 +24,7 @@
     <q-banner v-else-if="searchPerformed" class="q-mt-md">
       No customers found for the provided criteria.
     </q-banner>
-  </q-page>
+  </q-card>
 </template>
 
 <script lang="ts">

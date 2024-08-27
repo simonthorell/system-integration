@@ -47,7 +47,6 @@ public class CustomerService {
     
         RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("name");
         
-        System.out.println("HOT RELOAD TEST222");
         return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 }

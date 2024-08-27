@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header class="header" elevated>
       <q-toolbar>
         <!-- <q-btn
           flat
@@ -11,7 +11,7 @@
           @click="toggleLeftDrawer"
         /> -->
 
-        <q-toolbar-title> System Integration IoT 2024 </q-toolbar-title>
+        <q-toolbar-title> System Integration IoT </q-toolbar-title>
 
         <!-- <div>Quasar v{{ $q.version }}</div> -->
         <div>© Simon Thorell, IoT23, 2024</div>
