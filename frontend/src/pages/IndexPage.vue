@@ -21,9 +21,6 @@
       <div class="col-12 col-md-4">
         <SearchOrder />
       </div>
-      <!-- <div class="col-12 col-md-4">
-        <Top5Products />
-      </div> -->
     </div>
   </q-page>
 </template>

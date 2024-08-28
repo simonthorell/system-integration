@@ -27,7 +27,6 @@
         :columns="columns"
         row-key="city"
         flat
-        dense
         class="fixed-table"
       >
       </q-table>

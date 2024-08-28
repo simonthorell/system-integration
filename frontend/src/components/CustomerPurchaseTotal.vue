@@ -5,10 +5,10 @@
     <div>
       <div class="scrollable-container">
         <q-intersection
+          class="intersection"
           v-for="(customer, index) in customers"
           :key="index"
-          transition="fade"
-          class="example-item"
+          transition="scale"
         >
           <q-item clickable v-ripple class="customer-item">
             <q-item-section avatar>
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
 
@@ -56,6 +56,7 @@ export default defineComponent({
       }[]
     >([]);
     const searchPerformed = ref<boolean>(false);
+    let intervalId: number;
 
     const fetchCustomers = async () => {
       searchPerformed.value = false;
@@ -72,6 +73,14 @@ export default defineComponent({
 
     onMounted(() => {
       fetchCustomers();
+      // Poll backend for updates
+      intervalId = window.setInterval(fetchCustomers, 10000);
+    });
+
+    onBeforeUnmount(() => {
+      if (intervalId) {
+        clearInterval(intervalId); // Clear the interval when the component is destroyed
+      }
     });
 
     return {
@@ -85,14 +94,15 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .scrollable-container
-  max-height: 385px
+  height: 385px
   overflow-y: auto
 
-.example-item
-  margin-bottom: 8px
+.intersection
+  height: 65px
 
 .customer-item
   border-radius: 8px
+  margin-bottom: 8px
   background-color: $primary
   transition: background-color 0.3s ease, transform 0.3s ease
 
@@ -103,10 +113,10 @@ export default defineComponent({
 .customer-name-label
   font-size: 1.2rem
   font-weight: bold
-  color: $secondary
+  color: white
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2)
   transition: color 0.3s ease
 
   &:hover
-    color: $accent
+    color: $secondary
 </style>

@@ -1,22 +1,30 @@
 <template>
   <q-card class="q-pa-md">
     <div class="text-h6 text-left">Products per Category</div>
+
     <div class="q-pt-md">
       <div class="scrollable-container">
         <q-intersection
+          class="intersection"
           v-for="(category, index) in categories"
           :key="index"
-          transition="scale"
-          class="example-item"
+          transition="flip-right"
         >
           <q-item clickable v-ripple>
             <q-item-section avatar>
-              <q-avatar icon="category" color="primary" text-color="white">
+              <q-avatar
+                rounded
+                icon="category"
+                :color="getRandomColor()"
+                text-color="white"
+              >
               </q-avatar>
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>{{ category.name }}</q-item-label>
+              <q-item-label class="customer-name-label">{{
+                category.name
+              }}</q-item-label>
               <!-- <q-item-label caption lines="1"
                 >Number of Products: {{ category.product_count }}</q-item-label
               > -->
@@ -54,6 +62,12 @@ export default defineComponent({
     const searchPerformed = ref<boolean>(false);
     let intervalId: number;
 
+    // Used to assign the icon a random color
+    const colors = ['primary', 'secondary', 'accent'];
+    const getRandomColor = () => {
+      return colors[Math.floor(Math.random() * colors.length)];
+    };
+
     const fetchCategories = async () => {
       console.log('fetching categories');
       searchPerformed.value = false;
@@ -71,8 +85,8 @@ export default defineComponent({
 
     onMounted(() => {
       fetchCategories();
-      // Poll backend every 10 seconds for updates
-      intervalId = window.setInterval(fetchCategories, 10000);
+      // Poll backend for updates
+      intervalId = window.setInterval(fetchCategories, 3000);
     });
 
     onBeforeUnmount(() => {
@@ -85,6 +99,7 @@ export default defineComponent({
       categories,
       searchPerformed,
       fetchCategories,
+      getRandomColor,
     };
   },
 });
@@ -92,6 +107,19 @@ export default defineComponent({
 
 <style lang="sass" scoped>
 .scrollable-container
-  max-height: 300px
+  height: 300px
   overflow-y: auto
+
+.intersection
+  height: 65px
+
+.customer-name-label
+  font-size: 1.2rem
+  font-weight: bold
+  color: $secondary
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2)
+  transition: color 0.3s ease
+
+  &:hover
+    color: $primary
 </style>
