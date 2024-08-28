@@ -3,6 +3,9 @@
     <div class="row q-col-gutter-md q-mb-md">
       <div class="col-12 col-md-4">
         <BestSalesMonth />
+        <div class="q-mt-md">
+          <Top5Products />
+        </div>
       </div>
       <div class="col-12 col-md-4">
         <CustomerPurchaseTotal />
@@ -18,9 +21,9 @@
       <div class="col-12 col-md-4">
         <SearchOrder />
       </div>
-      <div class="col-12 col-md-4">
+      <!-- <div class="col-12 col-md-4">
         <Top5Products />
-      </div>
+      </div> -->
     </div>
   </q-page>
 </template>

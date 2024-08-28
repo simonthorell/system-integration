@@ -42,8 +42,8 @@ public class CustomerService {
         }
     
         // Log the query and parameters
-        System.out.println("SQL Query: " + sql.toString());
-        System.out.println("Parameters: " + params);
+        // System.out.println("SQL Query: " + sql.toString());
+        // System.out.println("Parameters: " + params);
     
         RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("name");
         

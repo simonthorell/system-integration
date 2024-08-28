@@ -1,33 +1,24 @@
 <template>
-  <q-card class="q-pa-md">
-    <q-card-section>
-      <div class="text-h6 text-left">Best Sales Month</div>
-    </q-card-section>
-
-    <q-card-section v-if="bestMonth" class="q-mt-md">
-      <q-card class="bg-secondary text-white q-pa-md q-mx-md q-shadow-2">
-        <div class="row no-wrap items-center justify-between">
-          <!-- Icon on the left side -->
-          <div class="col-auto">
-            <q-icon name="trending_up" size="64px" color="white" />
-          </div>
-          <!-- Text on the right side -->
-          <div class="col text-right q-pr-lg">
-            <div class="text-h4 q-mb-xs">
-              {{ bestMonth.month }}
-            </div>
-            <div class="text-h5 text-weight-bold q-mb-none">
-              {{ bestMonth.totalSales.toLocaleString() }} kr
-            </div>
-          </div>
+  <q-card v-if="bestMonth" class="bg-secondary text-white q-pa-md q-shadow-2">
+    <div class="row no-wrap items-center justify-between">
+      <!-- Icon on the left side -->
+      <div class="col-auto">
+        <q-icon name="paid" size="55px" color="white" />
+      </div>
+      <!-- Centered Text -->
+      <div class="q-pl-md col-auto text-center text-h5 q-my-auto">
+        Best Sales Month
+      </div>
+      <!-- Text on the right side -->
+      <div class="col text-right q-pr-lg">
+        <div class="text-h5 q-mb-xs">
+          {{ bestMonth.month }}
         </div>
-      </q-card>
-    </q-card-section>
-
-    <!-- Show a banner if no data is found -->
-    <q-banner v-else-if="searchPerformed" class="q-mt-md">
-      No sales data found.
-    </q-banner>
+        <div class="text-h7 text-weight-bold q-mb-none">
+          Total Sales: ${{ bestMonth.totalSales.toLocaleString() }}.00
+        </div>
+      </div>
+    </div>
   </q-card>
 </template>
 

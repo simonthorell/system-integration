@@ -5,8 +5,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Map;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +28,7 @@ public class SalesService {
             throw new RuntimeException("Failed to load SQL file", e);
         }
 
-        System.out.println("SQL Query: " + sql);
+        // System.out.println("SQL Query: " + sql);
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             Map<String, Object> result = new HashMap<>();
@@ -40,8 +38,6 @@ public class SalesService {
         });
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
-    @GetMapping("/sales/top-5-products")
     public List<Map<String, Object>> getTopFiveProducts() {
         String sql;
 
@@ -54,7 +50,7 @@ public class SalesService {
         }
 
         // Log the query
-        System.out.println("SQL Query: " + sql);
+        // System.out.println("SQL Query: " + sql);
 
         // Execute the SQL query and map the results to a list of maps
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
