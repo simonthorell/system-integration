@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CustomerController {
@@ -25,9 +26,9 @@ public class CustomerController {
         return customerService.findCustomersWhoBought(productName, color, size, brand);
     }
 
-    // @CrossOrigin(origins = "http://localhost:8080")
-    // @GetMapping("/customers/purchase-total")
-    // public List<String> getCustomerPurchaseTotals() {
-    //     return customerService.getCustomerPurchaseTotals();
-    // }
+    @CrossOrigin(origins = "http://localhost:8080")
+    @GetMapping("/customers/purchase-total")
+    public List<Map<String, Object>> getCustomerPurchaseTotals() {
+        return customerService.getCustomerPurchaseTotals();
+    }
 }

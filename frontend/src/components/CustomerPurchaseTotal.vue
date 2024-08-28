@@ -1,37 +1,43 @@
 <template>
   <q-card class="q-pa-md">
-    <div class="text-h6 text-left">Orders by City</div>
+    <div class="text-h6 text-left q-mb-md">Customer Purchase Totals</div>
 
-    <!-- Input and Search Button -->
-    <div class="q-pt-sm row items-center q-gutter-md">
-      <q-input
-        v-model="threshold"
-        label="Enter Threshold"
-        type="number"
-        outlined
-        dense
-        class="col"
-      />
-      <q-btn
-        @click="fetchOrders"
-        label="Search"
-        color="primary"
-        class="col-auto q-ml-sm q-mt-lg"
-      />
+    <div>
+      <div class="scrollable-container">
+        <q-intersection
+          v-for="(customer, index) in customers"
+          :key="index"
+          transition="fade"
+          class="example-item"
+        >
+          <q-item clickable v-ripple class="customer-item">
+            <q-item-section avatar>
+              <q-avatar color="secondary" text-color="white">
+                {{ index + 1 }}
+              </q-avatar>
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label class="customer-name-label">
+                {{ customer.first_name }} {{ customer.last_name }}
+              </q-item-label>
+              <q-item-label caption lines="1">
+                Total Spent: {{ customer.total_spent }} SEK
+              </q-item-label>
+            </q-item-section>
+
+            <q-item-section side>
+              <q-icon name="attach_money" color="yellow" />
+            </q-item-section>
+          </q-item>
+        </q-intersection>
+      </div>
     </div>
 
-    <!-- Table to Display Results -->
-    <div class="q-pt-md">
-      <q-table
-        :rows="orders"
-        :columns="columns"
-        row-key="city"
-        flat
-        dense
-        class="fixed-table"
-      >
-      </q-table>
-    </div>
+    <!-- Show a banner if no customers are found -->
+    <q-banner v-if="searchPerformed && customers.length === 0" class="q-mt-md">
+      No customers found.
+    </q-banner>
   </q-card>
 </template>
 
@@ -40,75 +46,67 @@ import { ref, onMounted } from 'vue';
 import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
 
-interface Order {
-  city: string;
-  total_order_value: number;
-}
-
 export default defineComponent({
   setup() {
-    const threshold = ref<number>(100);
-    const orders = ref<Order[]>([]);
+    const customers = ref<
+      {
+        first_name: string;
+        last_name: string;
+        total_spent: number;
+      }[]
+    >([]);
     const searchPerformed = ref<boolean>(false);
 
-    // Explicitly type the columns array
-    const columns: Array<{
-      name: string;
-      label: string;
-      field: keyof Order | ((row: Order) => string | number);
-      required?: boolean;
-      align?: 'left' | 'right' | 'center';
-    }> = [
-      {
-        name: 'city',
-        required: true,
-        label: 'City',
-        align: 'left',
-        field: 'city',
-      },
-      {
-        name: 'total_order_value',
-        required: true,
-        label: 'Total Order Value',
-        align: 'right',
-        field: 'total_order_value',
-      },
-    ];
-
-    const fetchOrders = async () => {
+    const fetchCustomers = async () => {
       searchPerformed.value = false;
       try {
-        const response = await api.get('/sales/get-order-for-city', {
-          params: { threshold: threshold.value },
-        });
-        orders.value = response.data;
+        const response = await api.get('/customers/purchase-total');
+        customers.value = response.data;
       } catch (error) {
-        console.error('Error fetching orders:', error);
-        orders.value = [];
+        console.error('Error fetching customer spending data:', error);
+        customers.value = [];
       } finally {
         searchPerformed.value = true;
       }
     };
 
-    // Automatically fetch data when the component is mounted
     onMounted(() => {
-      fetchOrders();
+      fetchCustomers();
     });
 
     return {
-      threshold,
-      orders,
+      customers,
       searchPerformed,
-      columns,
-      fetchOrders,
+      fetchCustomers,
     };
   },
 });
 </script>
 
 <style lang="sass" scoped>
-.fixed-table
-  min-height: 328px
-  max-height: 328px
+.scrollable-container
+  max-height: 385px
   overflow-y: auto
+
+.example-item
+  margin-bottom: 8px
+
+.customer-item
+  border-radius: 8px
+  background-color: $primary
+  transition: background-color 0.3s ease, transform 0.3s ease
+
+  &:hover
+    background-color: $primary
+    transform: scale(1.02)
+
+.customer-name-label
+  font-size: 1.2rem
+  font-weight: bold
+  color: $secondary
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2)
+  transition: color 0.3s ease
+
+  &:hover
+    color: $accent
 </style>

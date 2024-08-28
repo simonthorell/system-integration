@@ -6,7 +6,7 @@
         <q-intersection
           v-for="(category, index) in categories"
           :key="index"
-          transition="flip-right"
+          transition="scale"
           class="example-item"
         >
           <q-item clickable v-ripple>
@@ -89,3 +89,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="sass" scoped>
+.scrollable-container
+  max-height: 300px
+  overflow-y: auto
+</style>

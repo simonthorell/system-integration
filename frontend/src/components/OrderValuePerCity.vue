@@ -1,64 +1,114 @@
 <template>
   <q-card class="q-pa-md">
-    <div class="text-h6 text-left">Search For City By Order Value</div>
-    <q-input v-model="threshold" label="Minimum Order Value" outlined />
-    <q-btn
-      @click="fetchCityOrderValues"
-      label="Get Order Values per City"
-      color="primary"
-      class="q-mt-md"
-    />
+    <div class="text-h6 text-left">Orders by City</div>
 
-    <q-list v-if="cities.length" class="q-mt-md">
-      <q-item-label>Order Values per City</q-item-label>
-      <q-item v-for="city in cities" :key="city.name" clickable>
-        <q-item-section
-          >{{ city.name }}: {{ city.totalOrderValue }} kr</q-item-section
-        >
-      </q-item>
-    </q-list>
-    <!-- Show a banner if no cities are found -->
-    <q-banner v-else-if="searchPerformed" class="q-mt-md">
-      No cities found with order values above {{ threshold }} kr.
-    </q-banner>
+    <!-- Input and Search Button -->
+    <div class="q-pt-sm row items-center q-gutter-md">
+      <q-input
+        v-model="threshold"
+        label="Enter Threshold"
+        type="number"
+        outlined
+        dense
+        class="col"
+      />
+      <q-btn
+        @click="fetchOrders"
+        label="Search"
+        color="primary"
+        class="col-auto q-ml-sm q-mt-lg"
+      />
+    </div>
+
+    <!-- Table to Display Results -->
+    <div class="q-pt-md">
+      <q-table
+        :rows="orders"
+        :columns="columns"
+        row-key="city"
+        flat
+        dense
+        class="fixed-table"
+      >
+      </q-table>
+    </div>
   </q-card>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
 
+interface Order {
+  city: string;
+  total_order_value: number;
+}
+
 export default defineComponent({
   setup() {
-    const threshold = ref<number>(1000);
-    const cities = ref<{ name: string; totalOrderValue: number }[]>([]);
+    const threshold = ref<number>(100);
+    const orders = ref<Order[]>([]);
     const searchPerformed = ref<boolean>(false);
 
-    const fetchCityOrderValues = async () => {
+    // Explicitly type the columns array
+    const columns: Array<{
+      name: string;
+      label: string;
+      field: keyof Order | ((row: Order) => string | number);
+      required?: boolean;
+      align?: 'left' | 'right' | 'center';
+    }> = [
+      {
+        name: 'city',
+        required: true,
+        label: 'City',
+        align: 'left',
+        field: 'city',
+      },
+      {
+        name: 'total_order_value',
+        required: true,
+        label: 'Total Order Value',
+        align: 'right',
+        field: 'total_order_value',
+      },
+    ];
+
+    const fetchOrders = async () => {
       searchPerformed.value = false;
       try {
-        const response = await api.get('/orders/city-totals', {
-          params: {
-            threshold: threshold.value,
-          },
+        const response = await api.get('/sales/get-order-for-city', {
+          params: { threshold: threshold.value },
         });
-        console.log('City Order Values:', response.data);
-        cities.value = response.data;
+        orders.value = response.data;
       } catch (error) {
-        console.error('Error fetching city order values:', error);
-        cities.value = [];
+        console.error('Error fetching orders:', error);
+        orders.value = [];
       } finally {
         searchPerformed.value = true;
       }
     };
 
+    // Automatically fetch data when the component is mounted
+    onMounted(() => {
+      fetchOrders();
+    });
+
     return {
       threshold,
-      cities,
+      orders,
       searchPerformed,
-      fetchCityOrderValues,
+      columns,
+      fetchOrders,
     };
   },
 });
 </script>
+
+<style lang="sass" scoped>
+.fixed-table
+  min-height: 328px
+  max-height: 328px
+  overflow-y: auto
+</style>
