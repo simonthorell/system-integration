@@ -18,7 +18,12 @@ public class ProductController {
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/product/per-category")
     public List<Map<String, Object>> getProductsPerCategory() {
-        System.out.println("running..");
         return productService.getProductsPerCategory();
+    }
+
+    @CrossOrigin(origins = "http://localhost:8080")
+    @GetMapping("/product")
+    public List<Map<String, Object>> getProducts() {
+        return productService.getProducts();
     }
 }

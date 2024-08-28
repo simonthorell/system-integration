@@ -31,10 +31,20 @@ public class ProductService {
             throw new RuntimeException("Failed to load SQL file: get_products_per_category.sql", e);
         }
 
-        // Log the query
-        System.out.println("SQL Query: " + sql);
-
         // Execute the SQL query and return the results as a list of maps
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> getProducts() {
+        String sql;
+
+        try {
+            ClassPathResource resource = new ClassPathResource("get_products.sql");
+            sql = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load SQL file", e);
+        }
+
         return jdbcTemplate.queryForList(sql);
     }
 }

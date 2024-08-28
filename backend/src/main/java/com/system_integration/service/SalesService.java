@@ -21,14 +21,11 @@ public class SalesService {
         String sql;
 
         try {
-            // Use query from SQL script
             ClassPathResource resource = new ClassPathResource("get_best_sales_month.sql");
             sql = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load SQL file", e);
         }
-
-        // System.out.println("SQL Query: " + sql);
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
             Map<String, Object> result = new HashMap<>();
@@ -42,15 +39,11 @@ public class SalesService {
         String sql;
 
         try {
-            // Load the SQL script directly from the resources folder
             ClassPathResource resource = new ClassPathResource("get_top_five_products.sql");
             sql = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load SQL file: get_top_five_products.sql", e);
         }
-
-        // Log the query
-        // System.out.println("SQL Query: " + sql);
 
         // Execute the SQL query and map the results to a list of maps
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
@@ -67,7 +60,6 @@ public class SalesService {
         String sql;
 
         try {
-            // Load the SQL script from the resources folder
             ClassPathResource resource = new ClassPathResource("get_order_for_city.sql");
             sql = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
 
@@ -78,7 +70,6 @@ public class SalesService {
             throw new RuntimeException("Failed to load SQL file: get_cities_with_order_value_above.sql", e);
         }
 
-        // Execute the query with the modified SQL
         return jdbcTemplate.queryForList(sql);
     }
 }

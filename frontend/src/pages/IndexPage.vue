@@ -16,10 +16,13 @@
     </div>
     <div class="row q-col-gutter-md q-mb-md">
       <div class="col-12 col-md-4">
-        <ProductsPerCategory />
+        <AddProductToCart />
       </div>
       <div class="col-12 col-md-4">
         <SearchOrder />
+      </div>
+      <div class="col-12 col-md-4">
+        <ProductsPerCategory />
       </div>
     </div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -51,6 +54,7 @@ import OrderValuePerCity from 'src/components/OrderValuePerCity.vue';
 import ProductsPerCategory from 'src/components/ProductsPerCategory.vue';
 import SearchOrder from 'src/components/SearchOrder.vue';
 import Top5Products from 'src/components/Top5Products.vue';
+import AddProductToCart from 'src/components/AddProductToCart.vue';
 import ShoppingCartDialog from 'src/components/ShoppingCartDialog.vue';
 
 const shoppingCartDialog = ref<boolean>(false);

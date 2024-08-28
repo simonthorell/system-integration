@@ -45,12 +45,8 @@ public class CustomerService {
             params.add(brand);
         }
     
-        // Log the query and parameters
-        // System.out.println("SQL Query: " + sql.toString());
-        // System.out.println("Parameters: " + params);
-    
         RowMapper<String> rowMapper = (rs, rowNum) -> rs.getString("name");
-        
+    
         return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
     }
 
@@ -58,7 +54,6 @@ public class CustomerService {
         String sql;
 
         try {
-            // Load the SQL script from the resources folder
             ClassPathResource resource = new ClassPathResource("get_customer_purchase_totals.sql");
             sql = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
         } catch (Exception e) {
