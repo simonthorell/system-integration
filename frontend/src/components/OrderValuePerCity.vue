@@ -34,9 +34,8 @@
   </q-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
 
 interface Order {
@@ -44,64 +43,51 @@ interface Order {
   total_order_value: number;
 }
 
-export default defineComponent({
-  setup() {
-    const threshold = ref<number>(100);
-    const orders = ref<Order[]>([]);
-    const searchPerformed = ref<boolean>(false);
+const threshold = ref<number>(100);
+const orders = ref<Order[]>([]);
+const searchPerformed = ref<boolean>(false);
 
-    // Explicitly type the columns array
-    const columns: Array<{
-      name: string;
-      label: string;
-      field: keyof Order | ((row: Order) => string | number);
-      required?: boolean;
-      align?: 'left' | 'right' | 'center';
-    }> = [
-      {
-        name: 'city',
-        required: true,
-        label: 'City',
-        align: 'left',
-        field: 'city',
-      },
-      {
-        name: 'total_order_value',
-        required: true,
-        label: 'Total Order Value',
-        align: 'right',
-        field: 'total_order_value',
-      },
-    ];
-
-    const fetchOrders = async () => {
-      searchPerformed.value = false;
-      try {
-        const response = await api.get('/sales/get-order-for-city', {
-          params: { threshold: threshold.value },
-        });
-        orders.value = response.data;
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-        orders.value = [];
-      } finally {
-        searchPerformed.value = true;
-      }
-    };
-
-    // Automatically fetch data when the component is mounted
-    onMounted(() => {
-      fetchOrders();
-    });
-
-    return {
-      threshold,
-      orders,
-      searchPerformed,
-      columns,
-      fetchOrders,
-    };
+const columns: Array<{
+  name: string;
+  label: string;
+  field: keyof Order | ((row: Order) => string | number);
+  required?: boolean;
+  align?: 'left' | 'right' | 'center';
+}> = [
+  {
+    name: 'city',
+    required: true,
+    label: 'City',
+    align: 'left',
+    field: 'city',
   },
+  {
+    name: 'total_order_value',
+    required: true,
+    label: 'Total Order Value',
+    align: 'right',
+    field: 'total_order_value',
+  },
+];
+
+const fetchOrders = async () => {
+  searchPerformed.value = false;
+  try {
+    const response = await api.get('/sales/get-order-for-city', {
+      params: { threshold: threshold.value },
+    });
+    orders.value = response.data;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    orders.value = [];
+  } finally {
+    searchPerformed.value = true;
+  }
+};
+
+// Automatically fetch data when the component is mounted
+onMounted(() => {
+  fetchOrders();
 });
 </script>
 

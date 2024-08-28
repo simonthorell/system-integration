@@ -27,52 +27,37 @@
   </q-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref } from 'vue';
-import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios'; // Import the api instance from the boot file
 
-export default defineComponent({
-  setup() {
-    const productName = ref<string>('');
-    const color = ref<string>('');
-    const size = ref<string>('');
-    const brand = ref<string>('');
-    const customers = ref<string[]>([]);
-    const searchPerformed = ref<boolean>(false);
+const productName = ref<string>('');
+const color = ref<string>('');
+const size = ref<string>('');
+const brand = ref<string>('');
+const customers = ref<string[]>([]);
+const searchPerformed = ref<boolean>(false);
 
-    const onSubmit = async () => {
-      searchPerformed.value = false;
-      try {
-        const response = await api.get<string[]>('/customers/who-bought', {
-          params: {
-            productName: productName.value,
-            color: color.value,
-            size: size.value,
-            brand: brand.value,
-          },
-        });
-        console.log('Customers:', response.data);
-        customers.value = response.data;
-      } catch (error) {
-        console.error('Error fetching customers:', error);
-        customers.value = [];
-      } finally {
-        searchPerformed.value = true;
-      }
-    };
-
-    return {
-      productName,
-      color,
-      size,
-      brand,
-      customers,
-      searchPerformed,
-      onSubmit,
-    };
-  },
-});
+const onSubmit = async () => {
+  searchPerformed.value = false;
+  try {
+    const response = await api.get<string[]>('/customers/who-bought', {
+      params: {
+        productName: productName.value,
+        color: color.value,
+        size: size.value,
+        brand: brand.value,
+      },
+    });
+    console.log('Customers:', response.data);
+    customers.value = response.data;
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+    customers.value = [];
+  } finally {
+    searchPerformed.value = true;
+  }
+};
 </script>
 
 <style lang="sass">

@@ -22,9 +22,8 @@
   </q-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
 
 interface BestSalesMonth {
@@ -32,44 +31,34 @@ interface BestSalesMonth {
   totalSales: number;
 }
 
-export default defineComponent({
-  setup() {
-    const bestMonth = ref<{ month: string; totalSales: number } | null>(null);
-    const searchPerformed = ref<boolean>(false);
-    let intervalId: number;
+const bestMonth = ref<{ month: string; totalSales: number } | null>(null);
+const searchPerformed = ref<boolean>(false);
+let intervalId: number;
 
-    const fetchBestSalesMonth = async () => {
-      console.log('Fetching best sales month...'); // Log when the function starts
-      searchPerformed.value = false;
-      try {
-        const response = await api.get<BestSalesMonth>('/sales/best-month');
-        console.log('Best Sales Month:', response.data);
-        bestMonth.value = response.data;
-      } catch (error) {
-        console.error('Error fetching best sales month:', error);
-        bestMonth.value = null;
-      } finally {
-        searchPerformed.value = true;
-      }
-      console.log('response.data', bestMonth.value);
-    };
+const fetchBestSalesMonth = async () => {
+  console.log('Fetching best sales month...'); // Log when the function starts
+  searchPerformed.value = false;
+  try {
+    const response = await api.get<BestSalesMonth>('/sales/best-month');
+    console.log('Best Sales Month:', response.data);
+    bestMonth.value = response.data;
+  } catch (error) {
+    console.error('Error fetching best sales month:', error);
+    bestMonth.value = null;
+  } finally {
+    searchPerformed.value = true;
+  }
+  console.log('response.data', bestMonth.value);
+};
 
-    onMounted(() => {
-      fetchBestSalesMonth(); // Fetch immediately on mount
-      intervalId = window.setInterval(fetchBestSalesMonth, 10000); // Poll every 10 seconds
-    });
+onMounted(() => {
+  fetchBestSalesMonth(); // Fetch immediately on mount
+  intervalId = window.setInterval(fetchBestSalesMonth, 10000); // Poll every 10 seconds
+});
 
-    onBeforeUnmount(() => {
-      if (intervalId) {
-        clearInterval(intervalId); // Clear the interval when the component is destroyed
-      }
-    });
-
-    return {
-      bestMonth,
-      searchPerformed,
-      fetchBestSalesMonth,
-    };
-  },
+onBeforeUnmount(() => {
+  if (intervalId) {
+    clearInterval(intervalId); // Clear the interval when the component is destroyed
+  }
 });
 </script>

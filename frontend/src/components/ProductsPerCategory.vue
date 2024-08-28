@@ -22,12 +22,9 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label class="customer-name-label">{{
+              <q-item-label class="category-name-label">{{
                 category.name
               }}</q-item-label>
-              <!-- <q-item-label caption lines="1"
-                >Number of Products: {{ category.product_count }}</q-item-label
-              > -->
             </q-item-section>
 
             <q-item-section>
@@ -51,57 +48,45 @@
   </q-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
 
-export default defineComponent({
-  setup() {
-    const categories = ref<{ name: string; product_count: number }[]>([]);
-    const searchPerformed = ref<boolean>(false);
-    let intervalId: number;
+const categories = ref<{ name: string; product_count: number }[]>([]);
+const searchPerformed = ref<boolean>(false);
+let intervalId: number;
 
-    // Used to assign the icon a random color
-    const colors = ['primary', 'secondary', 'accent'];
-    const getRandomColor = () => {
-      return colors[Math.floor(Math.random() * colors.length)];
-    };
+// Used to assign the icon a random color
+const colors = ['primary', 'secondary', 'accent'];
+const getRandomColor = () => {
+  return colors[Math.floor(Math.random() * colors.length)];
+};
 
-    const fetchCategories = async () => {
-      console.log('fetching categories');
-      searchPerformed.value = false;
-      try {
-        const response = await api.get('/product/per-category');
-        console.log('Categories:', response.data);
-        categories.value = response.data;
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        categories.value = [];
-      } finally {
-        searchPerformed.value = true;
-      }
-    };
+const fetchCategories = async () => {
+  console.log('fetching categories');
+  searchPerformed.value = false;
+  try {
+    const response = await api.get('/product/per-category');
+    console.log('Categories:', response.data);
+    categories.value = response.data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    categories.value = [];
+  } finally {
+    searchPerformed.value = true;
+  }
+};
 
-    onMounted(() => {
-      fetchCategories();
-      // Poll backend for updates
-      intervalId = window.setInterval(fetchCategories, 3000);
-    });
+onMounted(() => {
+  fetchCategories();
+  // Poll backend for updates
+  intervalId = window.setInterval(fetchCategories, 3000);
+});
 
-    onBeforeUnmount(() => {
-      if (intervalId) {
-        clearInterval(intervalId); // Clear the interval when the component is destroyed
-      }
-    });
-
-    return {
-      categories,
-      searchPerformed,
-      fetchCategories,
-      getRandomColor,
-    };
-  },
+onBeforeUnmount(() => {
+  if (intervalId) {
+    clearInterval(intervalId); // Clear the interval when the component is destroyed
+  }
 });
 </script>
 
@@ -113,7 +98,7 @@ export default defineComponent({
 .intersection
   height: 65px
 
-.customer-name-label
+.category-name-label
   font-size: 1.2rem
   font-weight: bold
   color: $secondary

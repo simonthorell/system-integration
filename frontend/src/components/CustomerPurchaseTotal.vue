@@ -41,54 +41,43 @@
   </q-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
 
-export default defineComponent({
-  setup() {
-    const customers = ref<
-      {
-        first_name: string;
-        last_name: string;
-        total_spent: number;
-      }[]
-    >([]);
-    const searchPerformed = ref<boolean>(false);
-    let intervalId: number;
+const customers = ref<
+  {
+    first_name: string;
+    last_name: string;
+    total_spent: number;
+  }[]
+>([]);
+const searchPerformed = ref<boolean>(false);
+let intervalId: number;
 
-    const fetchCustomers = async () => {
-      searchPerformed.value = false;
-      try {
-        const response = await api.get('/customers/purchase-total');
-        customers.value = response.data;
-      } catch (error) {
-        console.error('Error fetching customer spending data:', error);
-        customers.value = [];
-      } finally {
-        searchPerformed.value = true;
-      }
-    };
+const fetchCustomers = async () => {
+  searchPerformed.value = false;
+  try {
+    const response = await api.get('/customers/purchase-total');
+    customers.value = response.data;
+  } catch (error) {
+    console.error('Error fetching customer spending data:', error);
+    customers.value = [];
+  } finally {
+    searchPerformed.value = true;
+  }
+};
 
-    onMounted(() => {
-      fetchCustomers();
-      // Poll backend for updates
-      intervalId = window.setInterval(fetchCustomers, 10000);
-    });
+onMounted(() => {
+  fetchCustomers();
+  // Poll backend for updates
+  intervalId = window.setInterval(fetchCustomers, 10000);
+});
 
-    onBeforeUnmount(() => {
-      if (intervalId) {
-        clearInterval(intervalId); // Clear the interval when the component is destroyed
-      }
-    });
-
-    return {
-      customers,
-      searchPerformed,
-      fetchCustomers,
-    };
-  },
+onBeforeUnmount(() => {
+  if (intervalId) {
+    clearInterval(intervalId); // Clear the interval when the component is destroyed
+  }
 });
 </script>
 

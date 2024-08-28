@@ -1,13 +1,6 @@
 <template>
   <q-card class="q-pa-md">
     <div class="text-h6 text-left">Top 5 Products</div>
-    <!-- <q-btn
-      @click="fetchTopProducts"
-      label="Get Top 5 Products"
-      color="primary"
-      class="q-mt-md"
-    /> -->
-
     <div class="q-pt-md">
       <div class="scrollable-container">
         <q-intersection
@@ -59,56 +52,45 @@
   </q-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
 
-export default defineComponent({
-  setup() {
-    const products = ref<
-      {
-        name: string;
-        brand: string;
-        price: number;
-        amountSold: number;
-      }[]
-    >([]);
-    const searchPerformed = ref<boolean>(false);
-    let intervalId: number;
+const products = ref<
+  {
+    name: string;
+    brand: string;
+    price: number;
+    amountSold: number;
+  }[]
+>([]);
+const searchPerformed = ref<boolean>(false);
+let intervalId: number;
 
-    const fetchTopProducts = async () => {
-      searchPerformed.value = false;
-      try {
-        const response = await api.get('/sales/top-5-products');
-        console.log('Top 5 Products:', response.data);
-        products.value = response.data;
-      } catch (error) {
-        console.error('Error fetching top products:', error);
-        products.value = [];
-      } finally {
-        searchPerformed.value = true;
-      }
-    };
+const fetchTopProducts = async () => {
+  searchPerformed.value = false;
+  try {
+    const response = await api.get('/sales/top-5-products');
+    console.log('Top 5 Products:', response.data);
+    products.value = response.data;
+  } catch (error) {
+    console.error('Error fetching top products:', error);
+    products.value = [];
+  } finally {
+    searchPerformed.value = true;
+  }
+};
 
-    onMounted(() => {
-      fetchTopProducts();
-      // Poll backend every 10 seconds for updates
-      intervalId = window.setInterval(fetchTopProducts, 10000);
-    });
+onMounted(() => {
+  fetchTopProducts();
+  // Poll backend every 10 seconds for updates
+  intervalId = window.setInterval(fetchTopProducts, 10000);
+});
 
-    onBeforeUnmount(() => {
-      if (intervalId) {
-        clearInterval(intervalId); // Clear the interval when the component is destroyed
-      }
-    });
-
-    return {
-      products,
-      searchPerformed,
-      fetchTopProducts,
-    };
-  },
+onBeforeUnmount(() => {
+  if (intervalId) {
+    clearInterval(intervalId); // Clear the interval when the component is destroyed
+  }
 });
 </script>
 
