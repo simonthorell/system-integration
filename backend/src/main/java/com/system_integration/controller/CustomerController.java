@@ -25,10 +25,4 @@ public class CustomerController {
                                               @RequestParam String brand) {
         return customerService.findCustomersWhoBought(productName, color, size, brand);
     }
-
-    @CrossOrigin(origins = "http://localhost:8080")
-    @GetMapping("/sales/best-month")
-    public Map<String, Object> getBestSalesMonthThisYear() {
-        return customerService.getBestSalesMonthThisYear();
-    }
 }

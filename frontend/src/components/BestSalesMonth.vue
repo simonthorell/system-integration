@@ -5,7 +5,7 @@
     </q-card-section>
 
     <q-card-section v-if="bestMonth" class="q-mt-md">
-      <q-card class="bg-primary text-white q-pa-md q-mx-md q-shadow-2">
+      <q-card class="bg-secondary text-white q-pa-md q-mx-md q-shadow-2">
         <div class="row no-wrap items-center justify-between">
           <!-- Icon on the left side -->
           <div class="col-auto">
