@@ -1,74 +1,114 @@
 <template>
-  <q-card>
-    <q-card-section>
-      <div class="text-h6 text-left">Customer Purchase Totals</div>
+  <q-card class="q-pa-md">
+    <div class="text-h6 text-left">Orders by City</div>
+
+    <!-- Input and Search Button -->
+    <div class="q-pt-sm row items-center q-gutter-md">
+      <q-input
+        v-model="threshold"
+        label="Enter Threshold"
+        type="number"
+        outlined
+        dense
+        class="col"
+      />
       <q-btn
-        @click="fetchCustomerTotals"
-        label="Get Customer Data"
+        @click="fetchOrders"
+        label="Search"
         color="primary"
-        class="q-mt-md"
+        class="col-auto q-ml-sm q-mt-lg"
       />
-    </q-card-section>
+    </div>
 
-    <q-card-section>
+    <!-- Table to Display Results -->
+    <div class="q-pt-md">
       <q-table
-        :rows="customers"
+        :rows="orders"
         :columns="columns"
-        row-key="name"
+        row-key="city"
         flat
-        bordered
-        style="min-height: 300px"
-      />
-    </q-card-section>
-
-    <!-- Show a banner if no customers are found -->
-    <!-- <q-banner v-else-if="searchPerformed" class="q-mt-md">
-      No customers found.
-    </q-banner> -->
+        dense
+        class="fixed-table"
+      >
+      </q-table>
+    </div>
   </q-card>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { defineComponent } from 'vue';
 import { api } from 'src/boot/axios';
-import { QTableProps } from 'quasar';
+
+interface Order {
+  city: string;
+  total_order_value: number;
+}
 
 export default defineComponent({
   setup() {
-    const customers = ref<{ name: string; totalSpent: number }[]>([]);
+    const threshold = ref<number>(100);
+    const orders = ref<Order[]>([]);
     const searchPerformed = ref<boolean>(false);
 
-    const columns = ref<QTableProps['columns']>([
-      { name: 'name', label: 'Customer Name', field: 'name', align: 'left' },
+    // Explicitly type the columns array
+    const columns: Array<{
+      name: string;
+      label: string;
+      field: keyof Order | ((row: Order) => string | number);
+      required?: boolean;
+      align?: 'left' | 'right' | 'center';
+    }> = [
       {
-        name: 'totalSpent',
-        label: 'Total Spent (kr)',
-        field: 'totalSpent',
-        align: 'right',
+        name: 'city',
+        required: true,
+        label: 'City',
+        align: 'left',
+        field: 'city',
       },
-    ]);
+      {
+        name: 'total_order_value',
+        required: true,
+        label: 'Total Order Value',
+        align: 'right',
+        field: 'total_order_value',
+      },
+    ];
 
-    const fetchCustomerTotals = async () => {
+    const fetchOrders = async () => {
       searchPerformed.value = false;
       try {
-        const response = await api.get('/customers/purchase-totals');
-        console.log('Customer Totals:', response.data);
-        customers.value = response.data;
+        const response = await api.get('/sales/get-order-for-city', {
+          params: { threshold: threshold.value },
+        });
+        orders.value = response.data;
       } catch (error) {
-        console.error('Error fetching customer totals:', error);
-        customers.value = [];
+        console.error('Error fetching orders:', error);
+        orders.value = [];
       } finally {
         searchPerformed.value = true;
       }
     };
 
+    // Automatically fetch data when the component is mounted
+    onMounted(() => {
+      fetchOrders();
+    });
+
     return {
-      customers,
-      columns,
+      threshold,
+      orders,
       searchPerformed,
-      fetchCustomerTotals,
+      columns,
+      fetchOrders,
     };
   },
 });
 </script>
+
+<style lang="sass" scoped>
+.fixed-table
+  min-height: 328px
+  max-height: 328px
+  overflow-y: auto
+</style>

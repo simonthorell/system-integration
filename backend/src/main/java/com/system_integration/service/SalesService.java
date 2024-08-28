@@ -62,4 +62,23 @@ public class SalesService {
             return result;
         });
     }
+
+    public List<Map<String, Object>> getOrderForCity(double threshold) {
+        String sql;
+
+        try {
+            // Load the SQL script from the resources folder
+            ClassPathResource resource = new ClassPathResource("get_order_for_city.sql");
+            sql = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+
+            // Replace the :threshold placeholder with the actual value
+            sql = sql.replace(":threshold", String.valueOf(threshold));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load SQL file: get_cities_with_order_value_above.sql", e);
+        }
+
+        // Execute the query with the modified SQL
+        return jdbcTemplate.queryForList(sql);
+    }
 }

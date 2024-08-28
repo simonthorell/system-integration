@@ -4,6 +4,7 @@ import com.system_integration.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,5 +26,11 @@ public class SalesController {
     @GetMapping("/sales/top-5-products")
     public List<Map<String, Object>> getTopFiveProducts() {
         return salesService.getTopFiveProducts();
+    }
+
+    @CrossOrigin(origins = "http://localhost:8080")
+    @GetMapping("/sales/get-order-for-city")
+    public List<Map<String, Object>> getOrderForCity(@RequestParam double threshold) {
+        return salesService.getOrderForCity(threshold);
     }
 }

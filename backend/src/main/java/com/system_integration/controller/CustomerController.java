@@ -24,4 +24,10 @@ public class CustomerController {
                                               @RequestParam String brand) {
         return customerService.findCustomersWhoBought(productName, color, size, brand);
     }
+
+    // @CrossOrigin(origins = "http://localhost:8080")
+    // @GetMapping("/customers/purchase-total")
+    // public List<String> getCustomerPurchaseTotals() {
+    //     return customerService.getCustomerPurchaseTotals();
+    // }
 }
