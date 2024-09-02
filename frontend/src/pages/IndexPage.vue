@@ -16,13 +16,13 @@
     </div>
     <div class="row q-col-gutter-md q-mb-md">
       <div class="col-12 col-md-4">
-        <AddProductToCart />
+        <ProductsPerCategory />
       </div>
       <div class="col-12 col-md-4">
         <SearchOrder />
       </div>
       <div class="col-12 col-md-4">
-        <ProductsPerCategory />
+        <AddProductToCart />
       </div>
     </div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">

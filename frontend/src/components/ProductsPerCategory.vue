@@ -80,7 +80,7 @@ const fetchCategories = async () => {
 onMounted(() => {
   fetchCategories();
   // Poll backend for updates
-  intervalId = window.setInterval(fetchCategories, 3000);
+  intervalId = window.setInterval(fetchCategories, 1500);
 });
 
 onBeforeUnmount(() => {
