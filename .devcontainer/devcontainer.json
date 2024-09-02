@@ -1,6 +1,5 @@
-// README at: https://github.com/devcontainers/templates/tree/main/src/docker-in-docker
 {
-  "name": "DevEnvironment (Docker in Docker)",
+  "name": "SystemIntegration (DinD)",
 
   "image": "mcr.microsoft.com/devcontainers/base:bullseye",
 
@@ -25,7 +24,10 @@
         "tal7aouy.icons",
         "bierner.markdown-preview-github-styles",
         "vscjava.vscode-java-pack",
-        "cweijan.vscode-mysql-client2"
+        "cweijan.vscode-mysql-client2",
+        "vmware.vscode-spring-boot",
+        "Yummygum.city-lights-icon-vsc",
+        "teabyii.ayu"
       ]
     }
   },

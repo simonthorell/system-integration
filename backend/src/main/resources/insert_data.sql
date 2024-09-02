@@ -41,7 +41,10 @@ INSERT INTO Product (name, size, color, price, brand, stock_quantity) VALUES
 ('Leather Belt', 'S', 'Brown', 249.00, 'BeltMasters', 50),
 ('Winter Coat', 'M', 'Black', 1499.00, 'WinterWear', 8),
 ('Designer Bag', 'M', 'Beige', 1999.00, 'LuxuryBrand', 3),
-('Comfy Black Pants', 'M', 'Black', 399.00, 'SweetPants', 20);
+('Cool Pants', '38', 'Black', 399.00, 'SweetPants', 20),
+('Cool Pants', '34', 'Black', 399.00, 'SweetPants', 20),
+('Cool Pants', '32', 'Black', 399.00, 'SweetPants', 20);
+
 
 INSERT INTO Customer (first_name, last_name, email, address, city) VALUES 
 ('Alice', 'Wonderland', 'alice@example.com', '123 Main St', 'Wonderland'),
@@ -90,21 +93,23 @@ INSERT INTO ProductCategory (product_id, category_id) VALUES
 (20, 10), (20, 8),
 (30, 10), (30, 8),
 -- Comfy Black Pants belongs to both Pants (3) and Sportswear (5)
-(31, 3), (31, 5);
+(31, 3), (31, 5),
+(32, 3), (32, 5),
+(33, 3), (33, 5);
 
 -- Create orders
 INSERT INTO `Order` (customer_id, order_date) VALUES
 (1, '2024-01-15'), (2, '2024-02-20'), (3, '2024-03-10'),
-(4, '2024-04-01'), (5, '2024-05-15'), (6, '2024-06-20'),
+(4, '2024-03-01'), (5, '2024-03-15'), (6, '2024-06-20'),
 (7, '2024-07-25'), (8, '2024-08-30'), (9, '2024-09-10'),
 (10, '2024-10-15');
 
 -- Order items
 INSERT INTO OrderItem (order_id, product_id, quantity) VALUES 
-(1, 1, 2), (1, 2, 1), (2, 3, 1), (2, 4, 3), (3, 5, 1),
-(4, 6, 2), (4, 7, 5), (5, 8, 1), (5, 9, 1), (6, 10, 1),
+(1, 1, 2), (1, 2, 6), (2, 3, 1), (2, 4, 3), (3, 5, 3),
+(4, 6, 1), (4, 7, 1), (5, 8, 1), (5, 9, 1), (6, 10, 1),
 (7, 11, 2), (7, 12, 1), (8, 13, 1), (8, 14, 3), (9, 15, 1),
-(10, 16, 2), (10, 17, 5), (1, 18, 1), (2, 19, 1), (3, 20, 1),
-(4, 21, 2), (5, 22, 1), (6, 23, 1), (7, 24, 3), (8, 25, 1),
-(9, 26, 2), (10, 27, 5), (1, 28, 1), (2, 29, 1), (3, 30, 1),
-(1, 31, 10), (2, 31, 15), (3, 31, 20), (4, 31, 8), (5, 31, 12);
+(10, 16, 2), (10, 17, 3), (1, 18, 2), (2, 19, 1), (3, 20, 1),
+(1, 21, 1), (5, 22, 2), (6, 23, 1), (7, 24, 3), (8, 25, 1),
+(9, 24, 1), (10, 27, 4), (1, 28, 1), (2, 29, 1), (3, 30, 1),
+(1, 31, 5), (2, 31, 3), (3, 32, 3), (4, 31, 1), (5, 33, 4);

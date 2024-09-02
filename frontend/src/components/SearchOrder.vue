@@ -14,16 +14,45 @@
       />
     </q-form>
 
-    <q-list v-if="customers.length" class="q-mt-md">
-      <q-item-label>Customers Who Bought {{ productName }}</q-item-label>
-      <q-item v-for="customer in customers" :key="customer" clickable>
-        <q-item-section>{{ customer }}</q-item-section>
-      </q-item>
-    </q-list>
-    <!-- Show a banner if no customers are found -->
-    <q-banner v-else-if="searchPerformed" class="q-mt-md">
-      No customers found for the provided criteria.
-    </q-banner>
+    <!-- Popup dialog for displaying search results -->
+    <q-dialog v-model="dialogVisible">
+      <q-card style="min-width: 400px">
+        <q-card-section>
+          <div class="text-h6">Search Results</div>
+        </q-card-section>
+
+        <q-card-section>
+          <!-- Show list of customers -->
+          <q-list bordered separator v-if="customers.length">
+            <q-item
+              v-for="customer in customers"
+              :key="customer"
+              clickable
+              v-ripple
+            >
+              <q-item-section avatar>
+                <q-icon color="secondary" name="person" />
+              </q-item-section>
+              <q-item-section>{{ customer }}</q-item-section>
+            </q-item>
+          </q-list>
+
+          <!-- Show a message if no customers are found -->
+          <q-banner v-else>
+            No customers found for the provided criteria.
+          </q-banner>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            label="Close"
+            color="primary"
+            @click="dialogVisible = false"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-card>
 </template>
 
@@ -37,6 +66,7 @@ const size = ref<string>('');
 const brand = ref<string>('');
 const customers = ref<string[]>([]);
 const searchPerformed = ref<boolean>(false);
+const dialogVisible = ref<boolean>(false); // Control dialog visibility
 
 const onSubmit = async () => {
   searchPerformed.value = false;
@@ -56,6 +86,7 @@ const onSubmit = async () => {
     customers.value = [];
   } finally {
     searchPerformed.value = true;
+    dialogVisible.value = true; // Show the dialog with results
   }
 };
 </script>
@@ -63,4 +94,7 @@ const onSubmit = async () => {
 <style lang="sass">
 .q-input
   padding-top: 10px
+
+.q-dialog
+  width: 800px
 </style>
