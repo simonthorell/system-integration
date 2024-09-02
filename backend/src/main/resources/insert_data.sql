@@ -93,7 +93,7 @@ INSERT INTO ProductCategory (product_id, category_id) VALUES
 (31, 3), (31, 5);
 
 -- Create orders
-INSERT INTO `Order` (customer   _id, order_date) VALUES
+INSERT INTO `Order` (customer_id, order_date) VALUES
 (1, '2024-01-15'), (2, '2024-02-20'), (3, '2024-03-10'),
 (4, '2024-04-01'), (5, '2024-05-15'), (6, '2024-06-20'),
 (7, '2024-07-25'), (8, '2024-08-30'), (9, '2024-09-10'),
