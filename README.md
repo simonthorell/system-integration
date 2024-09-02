@@ -4,6 +4,9 @@ This project demonstrates how you use Kubernetes to orchestrate a simple web-app
 
 This project utlize TypeScript/Vue/Quasar for the frontend, Java Spring Boot with JDBC for the backend and MySQL for database - all running in separated containers/pods.
 
+<!-- ## SQL Database ER-Diagram
+<img src="resources/er_diagram.png" width="450" height="450" alt="ER-Diagram"> -->
+
 ## Front- and Backend Setup
 
 1. Create monolit git repo

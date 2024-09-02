@@ -20,6 +20,9 @@
               <q-item-label class="product-name-label">
                 {{ product.name }}
               </q-item-label>
+              <q-item-label caption lines="1"
+                >Sold: {{ product.amountSold }} units</q-item-label
+              >
             </q-item-section>
 
             <q-item-section>
@@ -27,13 +30,7 @@
                 >Brand: {{ product.brand }}</q-item-label
               >
               <q-item-label caption lines="1"
-                >Price: ${{ product.price }}</q-item-label
-              >
-            </q-item-section>
-
-            <q-item-section>
-              <q-item-label caption lines="1"
-                >Sold: {{ product.amountSold }} units</q-item-label
+                >Price: {{ product.price }} SEK</q-item-label
               >
             </q-item-section>
 

@@ -1,18 +1,3 @@
-CREATE TABLE IF NOT EXISTS Product (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    size VARCHAR(10) NOT NULL,
-    color VARCHAR(20) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    brand VARCHAR(50) NOT NULL,
-    stock_quantity INT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS Category (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS Customer (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -38,10 +23,25 @@ CREATE TABLE IF NOT EXISTS OrderItem (
     FOREIGN KEY (product_id) REFERENCES Product(id)
 );
 
+CREATE TABLE IF NOT EXISTS Product (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    size VARCHAR(10) NOT NULL,
+    color VARCHAR(20) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    brand VARCHAR(50) NOT NULL,
+    stock_quantity INT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS ProductCategory (
     product_id INT NOT NULL,
     category_id INT NOT NULL,
     PRIMARY KEY (product_id, category_id),
     FOREIGN KEY (product_id) REFERENCES Product(id),
     FOREIGN KEY (category_id) REFERENCES Category(id)
+);
+
+CREATE TABLE IF NOT EXISTS Category (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
 );

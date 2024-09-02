@@ -15,7 +15,7 @@
           {{ bestMonth.month }}
         </div>
         <div class="text-h7 text-weight-bold q-mb-none">
-          Total Sales: ${{ bestMonth.totalSales.toLocaleString() }}.00
+          Total Sales: {{ bestMonth.totalSales.toLocaleString() }} SEK
         </div>
       </div>
     </div>
