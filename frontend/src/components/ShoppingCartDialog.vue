@@ -182,8 +182,6 @@ const checkout = async () => {
     })),
   };
 
-  // console.log('Order data:', orderData);
-
   try {
     // Send the order data to the backend
     const response = await api.post('/order', orderData);
@@ -191,6 +189,10 @@ const checkout = async () => {
 
     // Handle successful order placement (e.g., clear cart, show success message)
     shoppingCart.clearCart(); // Example: Clear the cart
+
+    // Clear customer field
+    selectedCustomer.value = null;
+
     isOpen.value = false; // Close the dialog
   } catch (error) {
     console.error('Failed to place the order:', error);
