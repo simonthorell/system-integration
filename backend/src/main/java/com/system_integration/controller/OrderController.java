@@ -31,7 +31,7 @@ public class OrderController {
 
             return ResponseEntity.ok("Order placed successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to place order: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to place order: " + e.getMessage());
         }
     }
 }

@@ -23,6 +23,9 @@ export const useCartStore = defineStore('cart', {
       // Remove the item by filtering it out
       this.items = this.items.filter((item) => item.id !== itemId);
     },
+    clearCart() {
+      this.items = [];
+    },
   },
 
   getters: {

@@ -71,7 +71,7 @@ const fetchCustomers = async () => {
 onMounted(() => {
   fetchCustomers();
   // Poll backend for updates
-  intervalId = window.setInterval(fetchCustomers, 10000);
+  intervalId = window.setInterval(fetchCustomers, 2000);
 });
 
 onBeforeUnmount(() => {
