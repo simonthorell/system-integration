@@ -68,7 +68,7 @@ const fetchTopProducts = async () => {
   searchPerformed.value = false;
   try {
     const response = await api.get('/sales/top-5-products');
-    console.log('Top 5 Products:', response.data);
+    // console.log('Top 5 Products:', response.data);
     products.value = response.data;
   } catch (error) {
     console.error('Error fetching top products:', error);

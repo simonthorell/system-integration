@@ -36,11 +36,10 @@ const searchPerformed = ref<boolean>(false);
 let intervalId: number;
 
 const fetchBestSalesMonth = async () => {
-  console.log('Fetching best sales month...'); // Log when the function starts
   searchPerformed.value = false;
   try {
     const response = await api.get<BestSalesMonth>('/sales/best-month');
-    console.log('Best Sales Month:', response.data);
+    // console.log('Best Sales Month:', response.data);
     bestMonth.value = response.data;
   } catch (error) {
     console.error('Error fetching best sales month:', error);
@@ -48,7 +47,6 @@ const fetchBestSalesMonth = async () => {
   } finally {
     searchPerformed.value = true;
   }
-  console.log('response.data', bestMonth.value);
 };
 
 onMounted(() => {

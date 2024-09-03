@@ -63,11 +63,11 @@ const getRandomColor = () => {
 };
 
 const fetchCategories = async () => {
-  console.log('fetching categories');
+  // console.log('fetching categories');
   searchPerformed.value = false;
   try {
     const response = await api.get('/product/per-category');
-    console.log('Categories:', response.data);
+    // console.log('Categories:', response.data);
     categories.value = response.data;
   } catch (error) {
     console.error('Error fetching categories:', error);

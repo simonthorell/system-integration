@@ -1,12 +1,35 @@
 <template>
   <q-dialog v-model="isOpen" @hide="emitClose">
     <q-card class="dialog-content">
-      <q-card-section>
+      <q-card-section class="q-pb-none">
         <div class="text-h6">Shopping Cart</div>
       </q-card-section>
 
-      <q-card-section class="q-pa-none">
-        <!-- Cart Items List -->
+      <!-- Customer Selection and New Customer Input -->
+      <q-card-section>
+        <div class="row q-col-gutter-md items-center">
+          <div class="col-10">
+            <!-- Select existing customer -->
+            <q-select
+              v-model="selectedCustomer"
+              :options="customerOptions"
+              label="Select Customer"
+              outlined
+              clearable
+              option-value="id"
+              option-label="name"
+              @update:model-value="onCustomerChange"
+            />
+          </div>
+          <div class="col-2 flex justify-center">
+            <!-- Button for new customer -->
+            <q-btn disable round icon="add" color="accent"></q-btn>
+          </div>
+        </div>
+      </q-card-section>
+
+      <!-- Cart Items List -->
+      <q-card-section class="q-pa-none q-pt-sm">
         <q-list bordered padding class="rounded-borders">
           <q-item
             clickable
@@ -60,15 +83,22 @@
 
       <q-card-actions align="right">
         <q-btn flat label="Close" color="primary" @click="isOpen = false" />
-        <q-btn flat label="Checkout" color="secondary" />
+        <q-btn flat label="Checkout" color="secondary" @click="checkout" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, watch, defineEmits, computed } from 'vue';
-import { useCartStore } from 'src/store/cart'; // Correct import path
+import { ref, watch, computed } from 'vue';
+import { api } from 'src/boot/axios';
+import { useCartStore } from 'src/store/cart';
+
+interface Customer {
+  id: number;
+  first_name: string;
+  last_name: string;
+}
 
 // Props to control the dialog from parent
 const props = defineProps<{
@@ -81,12 +111,28 @@ const emit = defineEmits(['update:modelValue']);
 // Use the shopping cart store
 const shoppingCart = useCartStore();
 
-// Map store state and actions
-const cartItems = computed(() => shoppingCart.items); // Reactive cart items
-const total = computed(() => shoppingCart.total); // Reactive total
-const removeItem = shoppingCart.removeItem; // Direct action from the store
+// Reactive state for cart items and total
+const cartItems = computed(() => shoppingCart.items);
+const total = computed(() => shoppingCart.total);
+const removeItem = shoppingCart.removeItem;
 
+// Reactive state for customer selection and input
+const selectedCustomer = ref<number | null>(null);
+const newCustomer = ref<string>('');
+
+// Customer options
+const customerOptions = ref<{ id: number; name: string }[]>([]);
+
+// Watch for changes in isOpen and fetch customers when the dialog opens
 const isOpen = ref(props.modelValue);
+watch(
+  () => isOpen.value,
+  async (newVal) => {
+    if (newVal) {
+      await fetchCustomers(); // Fetch customers when the dialog is opened
+    }
+  }
+);
 
 // Watch for changes in props.modelValue and update local isOpen accordingly
 watch(
@@ -96,9 +142,35 @@ watch(
   }
 );
 
+// Function to fetch customers from the backend
+const fetchCustomers = async () => {
+  try {
+    const response = await api.get('/customers');
+    console.log('Fetched customers:', response.data);
+    customerOptions.value = response.data.map((customer: Customer) => ({
+      id: customer.id,
+      name: `${customer.first_name} ${customer.last_name}`,
+    }));
+  } catch (error) {
+    console.error('Failed to fetch customers:', error);
+  }
+};
+
+// Function to handle customer change
+const onCustomerChange = () => {
+  newCustomer.value = ''; // Clear new customer field if an existing customer is selected
+};
+
+// Function to emit close event
 function emitClose() {
   emit('update:modelValue', false);
 }
+
+// Function to handle checkout (example)
+const checkout = () => {
+  console.log('Checkout initiated');
+  // Add your checkout logic here...
+};
 </script>
 
 <style scoped>

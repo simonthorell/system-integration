@@ -1,7 +1,7 @@
 <template>
   <q-card class="q-pa-md">
     <div class="text-h6 text-left">Add Product to Shopping Cart</div>
-    <q-form @submit="onSubmit">
+    <q-form @submit.prevent="onSubmit">
       <!-- Product Selection from Database -->
       <q-select
         v-model="selectedProduct"
@@ -35,17 +35,32 @@
         option-label="size"
         :disable="selectedProduct == null"
       />
-      <q-select
-        v-model="brand"
-        :options="brandOptions"
-        label="Brand"
-        outlined
-        use-input
-        clearable
-        option-value="id"
-        option-label="brand"
-        :disable="selectedProduct == null"
-      />
+      <div class="row q-col-gutter-md">
+        <div class="col">
+          <q-select
+            v-model="brand"
+            :options="brandOptions"
+            label="Brand"
+            outlined
+            use-input
+            clearable
+            option-value="id"
+            option-label="brand"
+            :disable="!selectedProduct"
+          />
+        </div>
+        <!-- Quantity Input -->
+        <div class="col">
+          <q-input
+            v-model.number="quantity"
+            label="Quantity"
+            outlined
+            type="number"
+            min="1"
+            :disable="!selectedProduct"
+          />
+        </div>
+      </div>
 
       <!-- Submit Button -->
       <q-btn
@@ -80,6 +95,7 @@ const products = ref<Product[]>([]);
 const color = ref<string>('');
 const size = ref<string>('');
 const brand = ref<string>('');
+const quantity = ref<number>(1); // Correctly define quantity as a reactive reference
 
 // Fetch the list of products from the backend
 const fetchProducts = async () => {
@@ -96,12 +112,13 @@ onMounted(() => {
   fetchProducts();
 });
 
-// Watch for changes in the selected product and clear dependent fields if needed
-watch(selectedProduct, () => {
-  if (!selectedProduct.value) {
+// Watcher to reset fields when selectedProduct changes
+watch(selectedProduct, (newProduct) => {
+  if (newProduct) {
     color.value = '';
     size.value = '';
     brand.value = '';
+    quantity.value = 1; // Reset quantity when product changes
   }
 });
 
@@ -167,7 +184,8 @@ const findProduct = (
       product.name === name &&
       product.color === color &&
       product.size === size &&
-      product.brand === brand
+      product.brand === brand &&
+      product.stock_quantity > 0 // Check if the product is in stock
   );
 };
 
@@ -189,7 +207,7 @@ const onSubmit = () => {
         size: product.size,
         color: product.color,
         price: product.price,
-        quantity: 1, // Default quantity, could be adjusted
+        quantity: quantity.value, // Use the selected quantity
       });
 
       console.log('Product added to cart:', product);
@@ -200,6 +218,10 @@ const onSubmit = () => {
 
   // Reset the form fields
   selectedProduct.value = null;
+  color.value = '';
+  size.value = '';
+  brand.value = '';
+  quantity.value = 1;
 };
 </script>
 

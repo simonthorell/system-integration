@@ -59,5 +59,20 @@ public class CustomerService {
 
         return jdbcTemplate.queryForList(sql);
     }
+
+    public List<Map<String, Object>> getCustomers() {
+        String sql;
+
+        try {
+            ClassPathResource resource = new ClassPathResource("get_customers.sql");
+            sql = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load SQL file", e);
+        }
+
+        System.out.println("Executing SQL query: " + sql);
+
+        return jdbcTemplate.queryForList(sql);
+    }
     
 }

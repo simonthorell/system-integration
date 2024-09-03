@@ -26,9 +26,17 @@ public class CustomerController {
         return customerService.findCustomersWhoBought(productName, color, size, brand);
     }
 
+    // API endpoint to get the total purchase amount of each customer
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/customers/purchase-total")
     public List<Map<String, Object>> getCustomerPurchaseTotals() {
         return customerService.getCustomerPurchaseTotals();
+    }
+
+    // API endpoint to get all customers
+    @CrossOrigin(origins = "http://localhost:8080")
+    @GetMapping("/customers")
+    public List<Map<String, Object>> getCustomers() {
+        return customerService.getCustomers();
     }
 }
