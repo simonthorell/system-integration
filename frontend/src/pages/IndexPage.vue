@@ -33,7 +33,11 @@
         size="22px"
         color="secondary"
         @click="shoppingCartDialog = true"
-        ><q-badge color="pink" floating style="font-size: 16px">4</q-badge>
+      >
+        <!-- Dynamic Badge Showing Number of Items in Cart -->
+        <q-badge color="pink" floating style="font-size: 16px">
+          {{ itemCount }}
+        </q-badge>
       </q-btn>
     </q-page-sticky>
 
@@ -47,7 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useCartStore } from 'src/store/cart';
 import BestSalesMonth from 'src/components/BestSalesMonth.vue';
 import CustomerPurchaseTotal from 'src/components/CustomerPurchaseTotal.vue';
 import OrderValuePerCity from 'src/components/OrderValuePerCity.vue';
@@ -59,12 +64,14 @@ import ShoppingCartDialog from 'src/components/ShoppingCartDialog.vue';
 
 const shoppingCartDialog = ref<boolean>(false);
 
-// Example cart items
-const cartItems = ref([
-  { name: 'Product 1', price: 10 },
-  { name: 'Product 2', price: 15 },
-  { name: 'Product 3', price: 20 },
-]);
+// Initialize the shopping cart store
+const shoppingCart = useCartStore();
+
+// Computed property for dynamically showing the number of items in the cart
+const itemCount = computed(() => shoppingCart.itemCount);
+
+// Reactive cart items from the store
+const cartItems = computed(() => shoppingCart.items);
 </script>
 
 <style scoped>

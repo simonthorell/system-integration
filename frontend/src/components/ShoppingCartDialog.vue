@@ -23,12 +23,15 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label lines="1">{{ item.name }}</q-item-label>
+              <q-item-label lines="1"
+                >{{ item.name }} ({{ item.size }},
+                {{ item.color }})</q-item-label
+              >
             </q-item-section>
 
             <q-item-section>
               <q-item-label caption
-                >Quantity: {{ item.price }} pcs</q-item-label
+                >Quantity: {{ item.quantity }} pcs</q-item-label
               >
               <q-item-label caption
                 >Item Price: {{ item.price }} SEK</q-item-label
@@ -36,7 +39,7 @@
             </q-item-section>
 
             <q-item-section side>
-              <q-icon name="delete" color="grey" />
+              <q-icon name="delete" color="grey" @click="removeItem(item.id)" />
             </q-item-section>
           </q-item>
         </q-list>
@@ -48,9 +51,7 @@
             <q-item-label class="checkout-text">Total Price:</q-item-label>
           </q-item-section>
           <q-item-section side>
-            <q-item-label class="checkout-text"
-              >{{ cartItems.length * 100 }} SEK</q-item-label
-            >
+            <q-item-label class="checkout-text">{{ total }} SEK</q-item-label>
           </q-item-section>
         </q-item>
       </q-card-section>
@@ -66,16 +67,24 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, watch, defineEmits } from 'vue';
+import { defineProps, ref, watch, defineEmits, computed } from 'vue';
+import { useCartStore } from 'src/store/cart'; // Correct import path
 
 // Props to control the dialog from parent
 const props = defineProps<{
   modelValue: boolean;
-  cartItems: { name: string; price: number }[];
 }>();
 
 // Emit value to parent when dialog state changes
 const emit = defineEmits(['update:modelValue']);
+
+// Use the shopping cart store
+const shoppingCart = useCartStore();
+
+// Map store state and actions
+const cartItems = computed(() => shoppingCart.items); // Reactive cart items
+const total = computed(() => shoppingCart.total); // Reactive total
+const removeItem = shoppingCart.removeItem; // Direct action from the store
 
 const isOpen = ref(props.modelValue);
 

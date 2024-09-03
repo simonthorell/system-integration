@@ -61,7 +61,9 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue';
 import { api } from 'src/boot/axios';
+import { useCartStore } from 'src/store/cart';
 
+// Define the Product interface
 interface Product {
   id: number;
   name: string;
@@ -72,6 +74,7 @@ interface Product {
   stock_quantity: number;
 }
 
+// Reference to the selected product and form fields
 const selectedProduct = ref<Product | null>(null);
 const products = ref<Product[]>([]);
 const color = ref<string>('');
@@ -87,25 +90,26 @@ const fetchProducts = async () => {
     console.error('Error fetching products:', error);
   }
 };
+
 // Get all products when the component is mounted
 onMounted(() => {
   fetchProducts();
 });
 
-// Watch for changes in the selected product and clear if needed
+// Watch for changes in the selected product and clear dependent fields if needed
 watch(selectedProduct, () => {
-  if (!selectedProduct.value || selectedProduct.value === null) {
+  if (!selectedProduct.value) {
     color.value = '';
     size.value = '';
     brand.value = '';
   }
 });
 
+// Computed options for the selects
 const productOptions = computed(() => {
   const uniqueProductNames = new Set(
     products.value.map((product) => product.name)
   );
-
   return Array.from(uniqueProductNames).map((name) => ({
     id: name,
     name: name,
@@ -148,7 +152,10 @@ const brandOptions = computed(() => {
   return Array.from(uniqueBrands);
 });
 
-// Find the product based on product name, color, size, and brand
+// Pinia store for the shopping cart
+const shoppingCart = useCartStore();
+
+// Find the exact product based on the selected attributes
 const findProduct = (
   name: string,
   color: string,
@@ -164,17 +171,35 @@ const findProduct = (
   );
 };
 
-const onSubmit = async () => {
+// Handle the form submission to add the product to the cart
+const onSubmit = () => {
   if (selectedProduct.value) {
-    const productId = findProduct(
+    const product = findProduct(
       selectedProduct.value.name,
       color.value,
       size.value,
       brand.value
     );
-    console.log('Product ID:', productId);
-    console.log('Product added to cart:', selectedProduct.value);
+
+    if (product) {
+      // Add the product to the shopping cart using the store's action
+      shoppingCart.addItem({
+        id: product.id.toString(),
+        name: product.name,
+        size: product.size,
+        color: product.color,
+        price: product.price,
+        quantity: 1, // Default quantity, could be adjusted
+      });
+
+      console.log('Product added to cart:', product);
+    } else {
+      console.error('Product not found with the selected options');
+    }
   }
+
+  // Reset the form fields
+  selectedProduct.value = null;
 };
 </script>
 
