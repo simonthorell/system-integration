@@ -33,7 +33,7 @@
   },
 
   // Expose port 5000 for backend
-  "forwardPorts": [5000],
+  "forwardPorts": [5000, 8080],
 
   // Run build script for building front & backend containers with docker compose
   "postCreateCommand": "chmod +x .devcontainer/post_script.sh && /bin/bash .devcontainer/post_script.sh"

@@ -146,7 +146,7 @@ watch(
 const fetchCustomers = async () => {
   try {
     const response = await api.get('/customers');
-    console.log('Fetched customers:', response.data);
+    // console.log('Fetched customers:', response.data);
     customerOptions.value = response.data.map((customer: Customer) => ({
       id: customer.id,
       name: `${customer.first_name} ${customer.last_name}`,
@@ -167,9 +167,34 @@ function emitClose() {
 }
 
 // Function to handle checkout (example)
-const checkout = () => {
-  console.log('Checkout initiated');
-  // Add your checkout logic here...
+const checkout = async () => {
+  if (!selectedCustomer.value) {
+    console.error('Please select a customer before checking out.');
+    return;
+  }
+
+  // Prepare the order data
+  const orderData = {
+    customer_id: selectedCustomer.value.id, // Selected customer ID
+    products: cartItems.value.map((item) => ({
+      product_id: item.id,
+      quantity: item.quantity,
+    })),
+  };
+
+  // console.log('Order data:', orderData);
+
+  try {
+    // Send the order data to the backend
+    const response = await api.post('/order', orderData);
+    console.log('Order placed successfully:', response.data);
+
+    // Handle successful order placement (e.g., clear cart, show success message)
+    shoppingCart.clearCart(); // Example: Clear the cart
+    isOpen.value = false; // Close the dialog
+  } catch (error) {
+    console.error('Failed to place the order:', error);
+  }
 };
 </script>
 
